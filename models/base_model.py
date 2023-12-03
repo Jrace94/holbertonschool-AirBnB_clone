@@ -27,8 +27,8 @@ class BaseModel:
                     self.__dict__[k] = v
         else:
             models.storage.new(self)save(self):
-        self.updated_at = datetime.today()
-        
+                self.updated_at = datetime.today()
+
     def to_dict(self):
         """Return the dictionary of the BaseModel instance.
 
