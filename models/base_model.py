@@ -8,7 +8,6 @@ from datetime import datetime
 class BaseModel:
     """Represents the BaseModel of the AirBnB Clone project."""
 
-
     def __init__(self, *args, **kwargs):
         """Initialize a new BaseModel.
 
