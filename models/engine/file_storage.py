@@ -23,7 +23,7 @@ class FileStorage:
         """Set in ___objects obj with key <obj_class_name>.id"""
         odict = FileStorage.__objects
         ocname = obj.__class__.__name__
-        odict["{}.{}".formart(ocname, obj.id)] = obj
+        odict["{}.{}".format(ocname, obj.id)] = obj
 
     def save(self):
         """Serialiaze __objects to the JSON file __file_path."""
@@ -38,7 +38,7 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path) as f:
                 objdict = json.load(f)
-                for i, o in objdict.item():
+                for i, o in objdict.items():
                     self.new(BaseModel(**o))
         except FileNotFoundError:
             return
