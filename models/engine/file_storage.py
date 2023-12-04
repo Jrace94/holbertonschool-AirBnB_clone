@@ -1,35 +1,44 @@
-#!/usr/bin/python3
+#!/us/bin/python3
 """file_storage module"""
+import json
+from uuid import uuid4
+from models.base_model import BaseModel
 
 
 class FileStorage:
-    """BaseModel Class"""
-    def __init__(self, *args, **kwargs):
-        """__init__ magic method"""
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if len(kwargs) != 0:
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
-                else:
-                    self.__dict__[k] = v
+    """Defines methods for storing files.
+
+    Attributes:
+    __file_path (str): The name of the file to save objects to.
+    __ objects (dict): A dictionary of instantiated objects.
+    """
+    __file_path = "file.json"
+    __objects = {}
+
+    def all(self):
+        """Return the dictionary __objects"""
+        return FileStorage.__objects
+
+    def new(self, obj):
+        """Set in ___objects obj with key <obj_class_name>.id"""
+        odict = FileStorage.__objects
+        ocname = obj.__class__.__name__
+        odict["{}.{}".formart(ocname, obj.id)] = obj
 
     def save(self):
-        """save method"""
-        self.updated_at = datetime.today()
+        """Serialiaze __objects to the JSON file __file_path."""
+        objdict = {}
+        for i, o in FileStorage.__objects.items():
+            objdict[i] = o.to_dict()
+        with open(FIleStorage.__file_path, "w") as f:
+            json.dump(objdict, f)
 
-    def to_dict(self):
-        """to_dict method"""
-        rdict = self.__dict__.copy()
-        rdict["created_at"] = self.created_at.isoformat()
-        rdict["updated_at"] = self.updated_at.isoformat()
-        rdict["__class__"] = self.__class__.__name__
-        return rdict
-
-    def __str__(self):
-        """__str__ magic method"""
-        clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+    def reload(self):
+        """Deserialiaze the JSON file __file_path to __objects, if it exists."""
+        try:
+            with open(FileStorage.__file_path) as f:
+                objdict = json.load(f)
+                for i, o in objdict.item():
+                    self.new(BaseModel(**o))
+        except FileNotFoundError:
+            return
